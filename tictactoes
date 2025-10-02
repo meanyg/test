@@ -24,7 +24,7 @@ def check_winner(board, player):
 def check_draw(board):
     return all(cell != " " for row in board for cell in row)
 
-def get_move(player):
+def create_move(player):
     while True:
         try:
             move = input(f"Player {player}, enter your move (row and column: 1 2): ")
@@ -41,7 +41,7 @@ def main():
     current_player = "X"
     print_board(board)
     while True:
-        row, col = get_move(current_player)
+        row, col = create_move(current_player)
         if board[row][col] != " ":
             print("Cell already taken. Choose another.")
             continue
