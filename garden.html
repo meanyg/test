@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop Garden</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #2d5016;
+            margin-bottom: 30px;
+        }
+
+        .garden-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 120px);
+            grid-template-rows: repeat(4, 120px);
+            gap: 10px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #8b7355;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .plot {
+            background-color: #654321;
+            border: 2px solid #4a3419;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .plot:hover {
+            background-color: #7d5a3a;
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .plot.planted {
+            background-color: #4a7c2f;
+            border-color: #3a5f24;
+        }
+
+        .plot.planted:hover {
+            background-color: #5a8d3f;
+        }
+
+        .plot-number {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .info-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-text {
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌱 Desktop Garden</h1>
+        <div class="garden-grid" id="gardenGrid"></div>
+        <div class="info-panel">
+            <p class="info-text" id="infoText">Click on any plot to plant or harvest</p>
+        </div>
+    </div>
+
+    <script>
+        const gridSize = 4;
+        const gardenGrid = document.getElementById('gardenGrid');
+        const infoText = document.getElementById('infoText');
+        const plots = [];
+
+        // Initialize garden grid
+        function initializeGarden() {
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const plot = document.createElement('div');
+                plot.className = 'plot';
+                plot.dataset.index = i;
+                plot.dataset.planted = 'false';
+                plot.textContent = 'Empty';
+                
+                plot.addEventListener('click', () => togglePlot(plot, i));
+                
+                gardenGrid.appendChild(plot);
+                plots.push(plot);
+            }
+        }
+
+        // Toggle plot state
+        function togglePlot(plot, index) {
+            const isPlanted = plot.dataset.planted === 'true';
+            
+            if (isPlanted) {
+                plot.dataset.planted = 'false';
+                plot.classList.remove('planted');
+                plot.textContent = 'Empty';
+                infoText.textContent = `Plot ${index + 1} harvested! 🌾`;
+            } else {
+                plot.dataset.planted = 'true';
+                plot.classList.add('planted');
+                plot.textContent = '🌱';
+                infoText.textContent = `Plot ${index + 1} planted! 🌱`;
+            }
+            
+            // Reset info text after 2 seconds
+            setTimeout(() => {
+                infoText.textContent = 'Click on any plot to plant or harvest';
+            }, 2000);
+        }
+
+        // Initialize on page load
+        initializeGarden();
+    </script>
+</body>
+</html>
